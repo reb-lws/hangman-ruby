@@ -1,4 +1,4 @@
-require_relative "lib/hangman.rb"
+#require_relative "lib/hangman.rb"
 
 filename = "5desk.txt"
 
@@ -7,29 +7,32 @@ unless File.exist?(filename)
   exit
 end
 
-# Count lines in file quickly
-line_count = `wc -l "#{filename}"`.strip.split(' ')[0].to_i
+# Return a random word from the specified file.
+def game_word(filename)
+  # Count lines in file quickly
+  line_count = `wc -l "#{filename}"`.strip.split(' ')[0].to_i
+  word_bank = File.open(filename, 'r')
+  randomizer = Random.new
+  random_line = randomizer.rand(line_count)
 
-# PUT ALL THIS IN A FILE LATER
-word_bank = File.open(filename, 'r')
-randomizer = Random.new
-random_line = randomizer.rand(line_count)
+  # Loop until the line specified by random_line
+  to_guess = nil
+  i = 0
 
-#
-# Loop until the line specified by random_line
-to_guess = nil
-i = 0
+  until i == random_line
+    to_guess = word_bank.readline.strip
+    i += 1
+  end
 
-until i == random_line
-  to_guess = word_bank.readline.strip
-  i += 1
+  # If this word isn't the right size we'll go to the next word 
+  # until we reach a word that fits
+  while to_guess.size < 5 || to_guess.size > 12
+    to_guess = word_bank.readline.strip
+  end
+
+  word_bank.close
+  return to_guess
 end
 
-# If this word isn't the right size we'll go next until we reach a word that fits
-while to_guess.size < 5 || to_guess.size > 12
-  to_guess = word_bank.readline.strip
-end
-
-word_bank.close
-# Word is picked now and is under to_guess
-
+to_guess = game_word(filename)
+p to_guess 
