@@ -1,15 +1,15 @@
 class Hangman
-  attr_reader :badguess_ary
+  attr_reader :badguess_ary, :game_progress
 
   def initialize(target_word)
     @target_word = target_word
     @badguess_ary = []
-    @display = []
-    target_word.size.times { @display << "_" }
+    @game_progress = []
+    target_word.size.times { @game_progress << "_" }
   end
 
   def display
-    @display.join(" ")
+    @game_progress.join(" ")
   end
 
   def lives
@@ -25,7 +25,7 @@ class Hangman
     elsif @target_word.include?(guess)
       index_ary = get_index_ary(guess)
       index_ary.each do |i|
-        @display[i] = guess
+        @game_progress[i] = guess
       end
     else
       puts "Bad guess...Sorry!"
@@ -34,7 +34,7 @@ class Hangman
   end
 
   def victory?
-    @display.include?("_") ? false : true
+    @game_progress.include?("_") ? false : true
   end
 
   private
