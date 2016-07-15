@@ -11,13 +11,13 @@ class Hangman
   def game_status
     puts progress_str
     puts "You have #{lives} lives left."
-    puts "Bad guesses: #{badguess_str}" unless @badguess_ary.empty?
+    puts "Bad guesses: #{badguess_str}" unless @badguess_ary.empty? || victory?
   end
 
   def move(guess)
     guess = guess.downcase
     if verify_input(guess)
-      if display.include?(guess)
+      if game_progress.include?(guess)
         puts "You already guessed that!"
       elsif @target_word.include?(guess)
         index_ary = get_index_ary(guess)
@@ -39,7 +39,7 @@ class Hangman
   end
 
   def defeat?
-    self.lives == 0
+    lives == 0
   end
 
   def save; end
@@ -77,7 +77,3 @@ class Hangman
     end
   end
 end
-
-
-test_game = Hangman.new("hey")
-test_game.game_status

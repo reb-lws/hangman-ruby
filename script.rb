@@ -1,5 +1,4 @@
-#require_relative "lib/hangman.rb"
-
+require_relative "lib/hangman.rb"
 filename = "5desk.txt"
 
 unless File.exist?(filename)
@@ -34,5 +33,27 @@ def game_word(filename)
   return to_guess
 end
 
+# Game script follows
 # Initialize new game
 game = Hangman.new(game_word(filename))
+
+until game.victory? do
+  game.game_status
+  print "\n"
+  print "Guess a letter >> "
+  input = gets.chomp
+  if input == "quit"
+    puts "Leaving game...bye!"
+    exit
+  else
+    game.move(input)
+  end
+
+  if game.defeat?
+    puts "You lost! No lives left!"
+    exit
+  end
+end
+
+puts "You've won!\n\n\n"
+game.game_status
