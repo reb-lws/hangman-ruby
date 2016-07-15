@@ -34,5 +34,5 @@ def game_word(filename)
   return to_guess
 end
 
-to_guess = game_word(filename)
-p to_guess 
+# Initialize new game
+game = Hangman.new(game_word(filename))

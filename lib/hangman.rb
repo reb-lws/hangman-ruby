@@ -1,20 +1,17 @@
 class Hangman
   attr_reader :badguess_ary, :game_progress
 
-  def initialize(target_word)
+  def initialize(target_word, badguess_ary=[], game_progress=[])
     @target_word = target_word
-    @badguess_ary = []
-    @game_progress = []
-    target_word.size.times { @game_progress << "_" }
+    @badguess_ary = badguess_ary
+    target_word.size.times { game_progress << "_" } if game_progress.empty?
+    @game_progress = game_progress
   end
 
-  def display
-    @game_progress.join(" ")
-  end
-
-  def lives
-    life_str = (7 - @badguess_ary.size).to_s
-    "#{life_str} tries left."
+  def game_status
+    puts progress_str
+    puts "You have #{lives} left."
+    puts "Bad guesses: #{badguess_str}" lives unless @badguess_ary.empty?
   end
 
   def move(guess)
@@ -24,6 +21,7 @@ class Hangman
       puts "You already guessed that!"
     elsif @target_word.include?(guess)
       index_ary = get_index_ary(guess)
+
       index_ary.each do |i|
         @game_progress[i] = guess
       end
@@ -37,6 +35,13 @@ class Hangman
     @game_progress.include?("_") ? false : true
   end
 
+  def defeat?
+    self.lives == 0
+  end
+
+  def save; end
+  def load; end
+
   private
   # Get all indexes of the occurrence of guess in @target_word
   def get_index_ary(guess)
@@ -48,4 +53,20 @@ class Hangman
     end
     index_ary
   end
+
+  def lives
+    7 - @badguess_ary.size
+  end
+
+  def progress_str
+    @game_progress.join(" ")
+  end
+
+  def badguess_str
+    @badguess_ary.join(", ")
+  end
 end
+
+
+test_game = Hangman.new("hey")
+test_game.game_status
