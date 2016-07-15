@@ -10,8 +10,8 @@ class Hangman
 
   def game_status
     puts progress_str
-    puts "You have #{lives} left."
-    puts "Bad guesses: #{badguess_str}" lives unless @badguess_ary.empty?
+    puts "You have #{lives} lives left."
+    puts "Bad guesses: #{badguess_str}" unless @badguess_ary.empty?
   end
 
   def move(guess)
@@ -70,7 +70,7 @@ class Hangman
   end
 
   def verify_input(s)
-    unless s.size == 1 && *("a".."z").include?(s)
+    unless s.size == 1 && [*("a".."z")].include?(s)
       false
     else
       true
