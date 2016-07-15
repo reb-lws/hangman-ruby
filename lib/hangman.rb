@@ -16,18 +16,21 @@ class Hangman
 
   def move(guess)
     guess = guess.downcase
+    if verify_input(guess)
+      if display.include?(guess)
+        puts "You already guessed that!"
+      elsif @target_word.include?(guess)
+        index_ary = get_index_ary(guess)
 
-    if display.include?(guess)
-      puts "You already guessed that!"
-    elsif @target_word.include?(guess)
-      index_ary = get_index_ary(guess)
-
-      index_ary.each do |i|
-        @game_progress[i] = guess
+        index_ary.each do |i|
+          @game_progress[i] = guess
+        end
+      else
+        puts "Bad guess...Sorry!"
+        badguess_ary << guess
       end
     else
-      puts "Bad guess...Sorry!"
-      badguess_ary << guess
+      puts "That's not a letter!"
     end
   end
 
@@ -64,6 +67,14 @@ class Hangman
 
   def badguess_str
     @badguess_ary.join(", ")
+  end
+
+  def verify_input(s)
+    unless s.size == 1 && *("a".."z").include?(s)
+      false
+    else
+      true
+    end
   end
 end
 
