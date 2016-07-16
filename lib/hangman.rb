@@ -52,14 +52,18 @@ class Hangman
       save_num += 1
     end
 
-    save_name = "#{save_num}.sav"
-    puts "Saving as #{save_name}"
+    save_file = "#{save_num}.sav"
+    puts "Saving as #{save_file}"
 
-    File.open("./saves/#{save_name}", "w") { |file| file << game_state }
+    File.open("./saves/#{save_file}", "w") { |file| file << game_state }
   end
 
   # Load a game and return the gameclass from the saves
-  def self.load; end
+  def self.load(save_file)
+    saved_game = nil
+    File.open("saves/#{save_file}") { |f| saved_game = Marshal.load(f) }
+    return saved_game
+  end
 
   private
   # Get all indexes of the occurrence of guess in @target_word
@@ -87,5 +91,9 @@ class Hangman
 
   def verify_input(s)
     s.size == 1 && [*("a".."z")].include?(s) ? true : false
+  end
+
+  def load_marshal(save_num)
+
   end
 end
