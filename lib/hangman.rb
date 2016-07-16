@@ -1,3 +1,4 @@
+require 'yaml'
 class Hangman
   attr_reader :badguess_ary, :game_progress
 
@@ -42,8 +43,23 @@ class Hangman
     lives == 0
   end
 
-  def save; end
-  def load; end
+  def save
+    save_num = 1
+    savedir_ary = Dir.entries("./saves")
+    game_state = Marshal::dump(self)
+
+    while savedir_ary.include?("#{save_num}.sav") do 
+      save_num += 1
+    end
+
+    save_name = "#{save_num}.sav"
+    puts "Saving as #{save_name}"
+
+    File.open("./saves/#{save_name}", "w") { |file| file << game_state }
+  end
+
+  # Load a game and return the gameclass from the saves
+  def self.load; end
 
   private
   # Get all indexes of the occurrence of guess in @target_word
@@ -70,10 +86,6 @@ class Hangman
   end
 
   def verify_input(s)
-    unless s.size == 1 && [*("a".."z")].include?(s)
-      false
-    else
-      true
-    end
+    s.size == 1 && [*("a".."z")].include?(s) ? true : false
   end
 end
