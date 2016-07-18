@@ -61,7 +61,9 @@ class Hangman
   # Load a game and return the gameclass from the saves
   def self.load(save_file)
     saved_game = nil
-    File.open("saves/#{save_file}") { |f| saved_game = Marshal.load(f) }
+    file_path = "./saves/#{save_file}"
+    File.open(file_path) { |f| saved_game = Marshal.load(f) }
+    File.delete(file_path)
     return saved_game
   end
 

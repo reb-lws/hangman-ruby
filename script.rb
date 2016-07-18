@@ -33,9 +33,44 @@ def game_word(filename)
   return to_guess
 end
 
+def show_saves
+  save = ""
+  savedir_ary = Dir.entries("./saves")
+  savedir_ary.each { |save| puts save + "\n-----" if save.include?(".sav") }
+end
+
 # Game script follows
 # Initialize new game
-game = Hangman.new(game_word(filename))
+puts "Hello, (s)tart a new Hangman game or (l)oad an existing game?"
+input = nil
+savedir_ary = Dir.entries("./saves")
+until input == "s" || input == "l" do
+  input = gets.chomp
+  if input == "s"
+    game = Hangman.new(game_word(filename))
+  elsif input == "l"
+    puts "Saved Games:"
+    if savedir_ary.size > 2 
+      show_saves()
+      save_file = nil
+
+      until savedir_ary.include?(save_file) do
+        save_file = gets.chomp
+        if savedir_ary.include?(save_file)
+          game = Hangman.load(save_file)
+          puts "Loading #{save_file}........................................."
+        else
+          puts "Enter a savename that exists!"
+        end
+      end
+    else
+      puts "No savegames available! (S)tart a game instead."
+      input = nil
+    end
+  else
+    puts "(s) or (l), please."
+  end
+end
 
 until game.victory? do
   game.game_status
@@ -45,6 +80,9 @@ until game.victory? do
   if input == "quit"
     puts "Leaving game...bye!"
     exit
+  elsif input == "save"
+    game.save
+    exit 
   else
     game.move(input)
   end
