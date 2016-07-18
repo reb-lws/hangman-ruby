@@ -50,6 +50,7 @@ until input == "s" || input == "l" do
     game = Hangman.new(game_word(filename))
   elsif input == "l"
     puts "Saved Games:"
+<<<<<<< HEAD
     if savedir_ary.size > 2 
       show_saves()
       save_file = nil
@@ -66,6 +67,19 @@ until input == "s" || input == "l" do
     else
       puts "No savegames available! (S)tart a game instead."
       input = nil
+=======
+    show_saves()
+    save_file = nil
+
+    until savedir_ary.include?(save_file) do
+      save_file = gets.chomp
+      if savedir_ary.include?(save_file)
+        game = Hangman.load(save_file)
+        puts "Loading #{save_file}........................................."
+      else
+        puts "Enter a savename that exists!"
+      end
+>>>>>>> 51b26ff1dd63187c92831d4eb3d9805fcfd5ded9
     end
   else
     puts "(s) or (l), please."
